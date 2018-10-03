@@ -1,0 +1,20 @@
+name:                conways-fight-for-survival
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/wolf-tickets/conways-fight-for-survival#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Al Smith
+maintainer:          alexgwsmith@gmail.com
+copyright:           Copyright (c) 2018 Al Smith (GNU GPLv3)
+category:            Haskell
+build-type:          Simple
+cabal-version:       >=1.10
+extra-source-files:  README.md
+
+executable conways-fight-for-survival
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
