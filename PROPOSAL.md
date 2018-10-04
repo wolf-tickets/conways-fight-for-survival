@@ -1,11 +1,11 @@
 
-#Functional Programming Project Proposal
+# Functional Programming Project Proposal
 
 
-##CPSC 312 - Winter 2018 Term
+## CPSC 312 - Winter 2018 Term
 
 
-####*Team Members: Al Smith, Tristan MacKinlay, Rob Willoughby*
+#### *Team Members: Al Smith, Tristan MacKinlay, Rob Willoughby*
 
 ___
 
