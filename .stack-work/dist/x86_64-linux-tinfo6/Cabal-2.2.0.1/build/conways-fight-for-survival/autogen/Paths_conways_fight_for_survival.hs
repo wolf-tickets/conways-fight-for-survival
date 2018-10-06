@@ -29,12 +29,12 @@ version :: Version
 version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
-bindir     = "/home/al/Projects/code/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/bin"
-libdir     = "/home/al/Projects/code/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/lib/x86_64-linux-ghc-8.4.3/conways-fight-for-survival-0.1.0.0-3zO0m7zeBkU7PIvqhHIoK9-conways-fight-for-survival"
-dynlibdir  = "/home/al/Projects/code/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/lib/x86_64-linux-ghc-8.4.3"
-datadir    = "/home/al/Projects/code/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/share/x86_64-linux-ghc-8.4.3/conways-fight-for-survival-0.1.0.0"
-libexecdir = "/home/al/Projects/code/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/libexec/x86_64-linux-ghc-8.4.3/conways-fight-for-survival-0.1.0.0"
-sysconfdir = "/home/al/Projects/code/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/etc"
+bindir     = "/home/tano/IdeaProjects/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/bin"
+libdir     = "/home/tano/IdeaProjects/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/lib/x86_64-linux-ghc-8.4.3/conways-fight-for-survival-0.1.0.0-3zO0m7zeBkU7PIvqhHIoK9-conways-fight-for-survival"
+dynlibdir  = "/home/tano/IdeaProjects/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/lib/x86_64-linux-ghc-8.4.3"
+datadir    = "/home/tano/IdeaProjects/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/share/x86_64-linux-ghc-8.4.3/conways-fight-for-survival-0.1.0.0"
+libexecdir = "/home/tano/IdeaProjects/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/libexec/x86_64-linux-ghc-8.4.3/conways-fight-for-survival-0.1.0.0"
+sysconfdir = "/home/tano/IdeaProjects/conways-fight-for-survival/.stack-work/install/x86_64-linux-tinfo6/lts-12.11/8.4.3/etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
 getBinDir = catchIO (getEnv "conways_fight_for_survival_bindir") (\_ -> return bindir)

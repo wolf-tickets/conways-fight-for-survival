@@ -1,7 +1,8 @@
 module Main where
 
 main :: IO ()
-main = 1 + 1
+main = print $ show $ 1 + 1
+
 {-|
  Title screen, game setup(# of players, # of cells, # of iterations per round, etc)
 
