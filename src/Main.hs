@@ -1,4 +1,5 @@
 module Main where
+import Lib
 
 main :: IO ()
 main = print $ show $ 1 + 1
