@@ -6,3 +6,5 @@ The logic of Conway's original Game of Life is mostly intact, but with an added 
 
 License: GNU-GPLv3
 Copyright (c) 2018 Al Smith, Tristan MacKinlay, Rob Willoughby
+
+Link to project proposal: https://wiki.ubc.ca/Course:CPSC312-2018-Conways-Darwinian-Nightmare
