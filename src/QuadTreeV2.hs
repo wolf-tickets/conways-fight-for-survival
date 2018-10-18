@@ -3,6 +3,8 @@ module QuadTreeV2 where
 type QuadTree2 a = (a,a,a,a)
 newtype QuadChunk = QuadChunk (QuadTree2 QuadChunk)
 
+data SubQuadChunk = NW | NE | SW | SE
+
 (#) :: QuadChunk -> SubQuadChunk -> QuadChunk
 QuadChunk (nw,ne,sw,se) # NW = nw
 QuadChunk (nw,ne,sw,se) # NE = ne
