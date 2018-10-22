@@ -40,3 +40,21 @@ qt # NE = ne qt
 qt # SW = sw qt
 qt # SE = se qt
 
+centeredSubNode (Quadtree (Quadtree {se = newNW}) (Quadtree {sw = newNE})
+                         (Quadtree {ne = newSW}) (Quadtree {nw = newSE}))
+                        = Quadtree newNW newNE
+                                   newSW newSE
+
+centeredHorizontal (Quadtree  _ Quadtree {se = newNW}
+                              _ Quadtree {ne = newSW})
+                   (Quadtree Quadtree {sw = newNE} _
+                             Quadtree {nw = newSE} _)
+                  = Quadtree newNW newNE
+                             newSW newSE
+
+centeredVertical (Quadtree _ _
+                           Quadtree {se = newNW} Quadtree {sw = newNE})
+                 (Quadtree Quadtree {ne = newSW} Quadtree {nw = newSE}
+                           _ _)
+                 = Quadtree newNW newNE
+                            newSW newSE
