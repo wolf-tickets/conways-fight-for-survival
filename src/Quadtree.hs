@@ -65,4 +65,13 @@ centeredVertical (Quadtree _ _
                  = Quadtree newNW newNE
                             newSW newSE
 
--- pad1 
+pad qt = Quadtree (Quadtree emptyTree emptyTree emptyTree (nw qt))
+                  (Quadtree emptyTree emptyTree (ne qt) emptyTree)
+                  (Quadtree emptyTree (sw qt) emptyTree emptyTree)
+                  (Quadtree (se qt) emptyTree emptyTree emptyTree)
+          where dep = depth qt
+                emptyTree = deadTreeFor dep
+
+deadTreeFor :: (Integral i) => i -> Quadtree t
+deadTreeFor 0 = Dead
+deadTreeFor n = Quadtree (deadTreeFor $ n-1) (deadTreeFor $ n-1) (deadTreeFor $ n-1) (deadTreeFor $ n-1)
