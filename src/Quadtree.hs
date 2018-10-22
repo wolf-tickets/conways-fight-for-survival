@@ -6,12 +6,19 @@ data Quadtree t
              , ne :: Quadtree t
              , sw :: Quadtree t
              , se :: Quadtree t }
-  deriving (Show)
+  | Dead
+  | Alive
+
+instance (Show a) => Show (Quadtree a) where
+  show Dead = "-"
+  show Alive = "#"
+  show qt = prettyPrint qt
 
 -- depth qt => retnens the depth of the Quadtree; depth of a cell is 0
 depth :: Quadtree t -> Int
 depth (Cell v) = 0
 depth (Quadtree nw ne sw se) = (1 + maximum (map depth [(nw), (ne), (sw), (se)]))
+depth qt = 0
 
 -- produce Quadtree t from list of fone Quadtree t
 qtFromList :: [Quadtree t] -> Quadtree t
@@ -21,9 +28,7 @@ qtFromList [nw, ne, sw, se] = Quadtree nw ne sw se
 qtToList :: (Quadtree t) -> [Quadtree t]
 qtToList (Quadtree nw ne sw se) = [nw, ne, sw, se]
 
-prettyPrint :: Quadtree Char -> String
-prettyPrint (Cell val) = [val]
-
+prettyPrint :: (Show a) => Quadtree a -> String
 prettyPrint (Quadtree nw ne sw se) =
   foldr
     (++)
@@ -31,6 +36,7 @@ prettyPrint (Quadtree nw ne sw se) =
     [ unlines $ zipWith (++) (lines $ prettyPrint nw) (lines $ prettyPrint ne)
     , unlines $ zipWith (++) (lines $ prettyPrint sw) (lines $ prettyPrint se)
     ]
+prettyPrint qt = show qt
 
 data SubQuadChunk = NW | NE | SW | SE
 
@@ -58,3 +64,5 @@ centeredVertical (Quadtree _ _
                            _ _)
                  = Quadtree newNW newNE
                             newSW newSE
+
+-- pad1 
