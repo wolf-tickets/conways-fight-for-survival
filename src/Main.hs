@@ -1,8 +1,18 @@
-module Main where
 import Lib
+import Quadtree
+import CellArray
 
 main :: IO ()
 main = print $ show $ 1 + 1
+
+loadGame :: FilePath -> IO (Quadtree Char)
+loadGame path = do raw <- (readFile path)
+                   let qt = qtFromString raw
+                   let dep = depth qt
+                   let paddedQT = padBy (displayDepth - dep) qt
+                   return paddedQT
+
+displayDepth = 5
 
 {-|
  Title screen, game setup(# of players, # of cells, # of iterations per round, etc)
