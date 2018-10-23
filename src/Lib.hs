@@ -67,6 +67,10 @@ evolve grid | depth grid == 2 = evolveLevel2 grid
                 q21 = centeredHorizontal (sw grid) (se grid)
                 q22 = centeredSubNode (se grid)
 
+--evolveBy generations qt
+evolveBy 0 qt = qt
+evolveBy generations qt = evolveBy (generations - 1) (evolve $ pad $ qt)
+
 alive1 = Quadtree Alive Alive Alive Alive
 dead1 = Quadtree Dead Dead Dead Dead
 dead2 = Quadtree dead1 dead1 dead1 dead1

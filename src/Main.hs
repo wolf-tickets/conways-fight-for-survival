@@ -5,14 +5,20 @@ import CellArray
 main :: IO ()
 main = print $ show $ 1 + 1
 
-loadGame :: FilePath -> IO (Quadtree Char)
-loadGame path = do raw <- (readFile path)
-                   let qt = qtFromString raw
-                   let dep = depth qt
-                   let paddedQT = padBy (displayDepth - dep) qt
-                   return paddedQT
+loadGame :: FilePath -> Int -> IO (Quadtree Char)
+loadGame path displayDepth = do raw <- (readFile path)
+                                let qt = qtFromString raw
+                                let dep = depth qt
+                                let paddedQT = padBy (displayDepth - dep) qt
+                                return paddedQT
 
-displayDepth = 5
+evolveState :: FilePath -> Int -> IO ()
+evolveState path numGenerations = do qt <- loadGame path defaultDepth
+                                     let evolved = evolveBy numGenerations qt
+                                     writeFile ("evolvedStates/after_" ++ show numGenerations ++ ".txt") (show evolved)
+                                     print "Done writing output."
+
+defaultDepth = 7
 
 {-|
  Title screen, game setup(# of players, # of cells, # of iterations per round, etc)
