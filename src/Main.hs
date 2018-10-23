@@ -1,9 +1,5 @@
 import Lib
 import Quadtree
-import CellArray
-
-main :: IO ()
-main = print $ show $ 1 + 1
 
 loadGame :: FilePath -> Int -> IO (Quadtree Char)
 loadGame path displayDepth = do raw <- (readFile path)
