@@ -1,9 +1,10 @@
 module Lib where
 
 import Quadtree
+import CellArray
 
-dead = Dead
-alive = Alive
+-- dead = Dead
+-- Alive = Alive
 
 --alive = Cell 1
 
@@ -13,9 +14,9 @@ alive = Alive
 shouldLive :: Quadtree Char -> Int -> Quadtree Char
 shouldLive cell numNeighbours =
   if numNeighbours > 3 || numNeighbours < 2
-    then dead
+    then Dead
     else (case numNeighbours of
-               3 -> alive
+               3 -> Alive
                _ -> cell)
 
 --sumCells = foldr (\ (Cell v) s -> v + s ) 0
@@ -66,14 +67,14 @@ evolve grid | depth grid == 2 = evolveLevel2 grid
                 q21 = centeredHorizontal (sw grid) (se grid)
                 q22 = centeredSubNode (se grid)
 
-alive1 = Quadtree alive alive alive alive
-dead1 = Quadtree dead dead dead dead
+alive1 = Quadtree Alive Alive Alive Alive
+dead1 = Quadtree Dead Dead Dead Dead
 dead2 = Quadtree dead1 dead1 dead1 dead1
 
-nw1 = Quadtree dead dead dead alive
-ne1 = Quadtree dead dead dead dead
-sw1 = Quadtree dead dead alive alive
-se1 = Quadtree alive dead alive dead
+nw1 = Quadtree Dead Dead Dead Alive
+ne1 = Quadtree Dead Dead Dead Dead
+sw1 = Quadtree Dead Dead Alive Alive
+se1 = Quadtree Alive Dead Alive Dead
 
 nw2 = Quadtree dead1 dead1 dead1 nw1
 ne2 = Quadtree dead1 dead1 ne1 dead1
@@ -87,3 +88,4 @@ se3 = Quadtree se2 dead2 dead2 dead2
 
 gliderGrid = Quadtree    nw3 ne3
                          sw3 se3
+

@@ -1,8 +1,7 @@
 module Quadtree where
 
 data Quadtree t
-  = Cell t
-  | Quadtree { nw :: Quadtree t
+  = Quadtree { nw :: Quadtree t
              , ne :: Quadtree t
              , sw :: Quadtree t
              , se :: Quadtree t }
@@ -12,11 +11,16 @@ data Quadtree t
 instance (Show a) => Show (Quadtree a) where
   show Dead = "-"
   show Alive = "#"
-  show qt = prettyPrint qt
+  show (Quadtree nw ne sw se) =
+    foldr
+      (++)
+      []
+      [ unlines $ zipWith (++) (lines $ show nw) (lines $ show ne)
+      , unlines $ zipWith (++) (lines $ show sw) (lines $ show se)
+      ]
 
 -- depth qt => retnens the depth of the Quadtree; depth of a cell is 0
 depth :: Quadtree t -> Int
-depth (Cell v) = 0
 depth (Quadtree nw ne sw se) = (1 + maximum (map depth [(nw), (ne), (sw), (se)]))
 depth qt = 0
 
@@ -28,15 +32,33 @@ qtFromList [nw, ne, sw, se] = Quadtree nw ne sw se
 qtToList :: (Quadtree t) -> [Quadtree t]
 qtToList (Quadtree nw ne sw se) = [nw, ne, sw, se]
 
-prettyPrint :: (Show a) => Quadtree a -> String
-prettyPrint (Quadtree nw ne sw se) =
-  foldr
-    (++)
-    []
-    [ unlines $ zipWith (++) (lines $ prettyPrint nw) (lines $ prettyPrint ne)
-    , unlines $ zipWith (++) (lines $ prettyPrint sw) (lines $ prettyPrint se)
-    ]
+
 prettyPrint qt = show qt
+
+parseChar ch = case ch of
+                    '#' -> Alive
+                    '-' -> Dead
+
+parseCharStr str = parseChar (head str)
+
+qtFromString :: String -> Quadtree Char
+qtFromString str | height > 2 = Quadtree nwTree neTree
+                                         swTree seTree
+                 | otherwise = Quadtree (parseCharStr (westChunks !! 0)) (parseCharStr (eastChunks !! 0))
+                                        (parseCharStr (westChunks !! 1)) (parseCharStr (eastChunks !! 1))
+  where rows = lines str
+        height = length rows
+        halfHeight = (height `div` 2)
+        halvedLines = [splitAt halfHeight row | row <- rows]
+        (westChunks, eastChunks) = (unzip halvedLines)
+        (nwChunks, swChunks) = splitAt halfHeight westChunks
+        (nwQuadrant, swQuadrant) = (unlines nwChunks, unlines swChunks)
+        (neChunks, seChunks) = splitAt halfHeight eastChunks
+        (neQuadrant, seQuadrant) = (unlines neChunks, unlines seChunks)
+        nwTree = qtFromString nwQuadrant
+        neTree = qtFromString neQuadrant
+        swTree = qtFromString swQuadrant
+        seTree = qtFromString seQuadrant
 
 data SubQuadChunk = NW | NE | SW | SE
 
@@ -70,7 +92,10 @@ pad qt = Quadtree (Quadtree emptyTree emptyTree emptyTree (nw qt))
                   (Quadtree emptyTree (sw qt) emptyTree emptyTree)
                   (Quadtree (se qt) emptyTree emptyTree emptyTree)
           where dep = depth qt
-                emptyTree = deadTreeFor dep
+                emptyTree = deadTreeFor (dep - 1)
+
+padBy 0 qt = qt
+padBy n qt = padBy (n-1) (pad qt)
 
 deadTreeFor :: (Integral i) => i -> Quadtree t
 deadTreeFor 0 = Dead
