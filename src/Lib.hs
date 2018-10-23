@@ -2,8 +2,8 @@ module Lib where
 
 import Quadtree
 
-dead = Cell ' '
-alive = Cell '#'
+dead = Dead
+alive = Alive
 
 --alive = Cell 1
 
@@ -19,7 +19,9 @@ shouldLive cell numNeighbours =
                _ -> cell)
 
 --sumCells = foldr (\ (Cell v) s -> v + s ) 0
-sumCells = foldr (\ (Cell v) s -> s + (if v == ' ' then 0 else 1)) 0
+sumCells = foldr (\ v s -> s + (case v of
+                                        Dead -> 0
+                                        Alive -> 1)) 0
 
 -- Evolve a quadtree at level 2
 evolveLevel2 (Quadtree qtNW qtNE qtSW qtSE) =
@@ -44,3 +46,44 @@ evolveLevel2 (Quadtree qtNW qtNE qtSW qtSE) =
     ne qtSW,          ne qtSE,
     se qtSW, sw qtSE, se qtSE
     ]))
+
+--evolve grid
+evolve :: Quadtree Char -> Quadtree Char
+evolve grid | depth grid == 2 = evolveLevel2 grid
+            | otherwise       = Quadtree 
+                                        (evolve $ Quadtree q00 q01 q10 q11)
+                                        (evolve $ Quadtree q01 q02 q11 q12)
+                                        (evolve $ Quadtree q10 q11 q20 q21)
+                                        (evolve $ Quadtree q11 q12 q21 q22)
+            where
+                q00 = centeredSubNode (nw grid)
+                q01 = centeredHorizontal (nw grid) (ne grid)
+                q02 = centeredSubNode (ne grid)
+                q10 = centeredVertical (nw grid) (sw grid)
+                q11 = centeredSubNode (centeredSubNode grid)
+                q12 = centeredVertical (ne grid) (se grid)
+                q20 = centeredSubNode (sw grid)
+                q21 = centeredHorizontal (sw grid) (se grid)
+                q22 = centeredSubNode (se grid)
+
+alive1 = Quadtree alive alive alive alive
+dead1 = Quadtree dead dead dead dead
+dead2 = Quadtree dead1 dead1 dead1 dead1
+
+nw1 = Quadtree dead dead dead alive
+ne1 = Quadtree dead dead dead dead
+sw1 = Quadtree dead dead alive alive
+se1 = Quadtree alive dead alive dead
+
+nw2 = Quadtree dead1 dead1 dead1 nw1
+ne2 = Quadtree dead1 dead1 ne1 dead1
+sw2 = Quadtree dead1 sw1 dead1 dead1
+se2 = Quadtree se1 dead1 dead1 dead1
+
+nw3 = Quadtree dead2 dead2 dead2 nw2
+ne3 = Quadtree dead2 dead2 ne2 dead2
+sw3 = Quadtree dead2 sw2 dead2 dead2
+se3 = Quadtree se2 dead2 dead2 dead2
+
+gliderGrid = Quadtree    nw3 ne3
+                         sw3 se3
