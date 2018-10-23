@@ -1,16 +1,10 @@
 module Lib where
 
 import Quadtree
-import CellArray
 
--- dead = Dead
--- Alive = Alive
-
---alive = Cell 1
-
-
---shouldLive cell neighbours
---shouldLive :: Quadtree Int -> Int -> Quadtree Int
+-- Calculates whether a cell should be alive or dead for the next generation
+-- cell: the cell being evolved to the next generation
+-- numNeighbours: the number of neighbours that cell has
 shouldLive :: Quadtree Char -> Int -> Quadtree Char
 shouldLive cell numNeighbours =
   if numNeighbours > 3 || numNeighbours < 2
@@ -19,12 +13,18 @@ shouldLive cell numNeighbours =
                3 -> Alive
                _ -> cell)
 
---sumCells = foldr (\ (Cell v) s -> v + s ) 0
+-- Returns the number of neighbouring cells that are alive
+sumCells :: [Quadtree t] -> Int
 sumCells = foldr (\ v s -> s + (case v of
                                         Dead -> 0
                                         Alive -> 1)) 0
 
--- Evolve a quadtree at level 2
+-- Takes a Quadtree of level 2 and returns the next generation
+-- qtNW: the NW quadrant of the original Quadtree
+-- qtNE: the NE quadrant of the original Quadtree
+-- qtSW: the SW quadrant of the original Quadtree
+-- qtSE: the SE quadrant of the original Quadtree
+evolveLevel2 :: Quadtree Char -> Quadtree Char
 evolveLevel2 (Quadtree qtNW qtNE qtSW qtSE) =
   Quadtree
     (shouldLive (se qtNW)  (sumCells [
@@ -48,15 +48,16 @@ evolveLevel2 (Quadtree qtNW qtNE qtSW qtSE) =
     se qtSW, sw qtSE, se qtSE
     ]))
 
---evolve grid
+-- Takes a grid of Quadtrees and evolves it to the next generation
+-- grid: the grid of Quadtrees to evolve
 evolve :: Quadtree Char -> Quadtree Char
-evolve grid | depth grid == 2 = evolveLevel2 grid
-            | otherwise       = Quadtree 
+evolve grid | depth grid == 2 = evolveLevel2 grid                               -- if depth 2, call evolveLevel2
+            | otherwise       = Quadtree                                        -- else, recursively call evolve
                                         (evolve $ Quadtree q00 q01 q10 q11)
                                         (evolve $ Quadtree q01 q02 q11 q12)
                                         (evolve $ Quadtree q10 q11 q20 q21)
                                         (evolve $ Quadtree q11 q12 q21 q22)
-            where
+            where                                                               -- split up into component parts
                 q00 = centeredSubNode (nw grid)
                 q01 = centeredHorizontal (nw grid) (ne grid)
                 q02 = centeredSubNode (ne grid)
@@ -67,8 +68,10 @@ evolve grid | depth grid == 2 = evolveLevel2 grid
                 q21 = centeredHorizontal (sw grid) (se grid)
                 q22 = centeredSubNode (se grid)
 
+-- Helper functions/variables for testing purposes
 alive1 = Quadtree Alive Alive Alive Alive
 dead1 = Quadtree Dead Dead Dead Dead
+
 dead2 = Quadtree dead1 dead1 dead1 dead1
 
 nw1 = Quadtree Dead Dead Dead Alive
