@@ -1,4 +1,4 @@
-module StringOfLife where
+module StrinOfife where
 
 import Data.List
 import Data.Char
@@ -7,26 +7,25 @@ import Rainbow
 import Graphics.Gloss
 
 -- data type constructor for square game grid with size (dim x dim)
--- with all blank cells
+-- with all blank cells:
 data GameGrid = GameGrid
   { d :: Int
-  , cells :: [Char]
+  , cells :: Seq Char
   } deriving (Show)
 
 newGrid :: Int -> GameGrid
 newGrid n = (GameGrid n (replicate (n * n) 'b'))
 
 randGrid :: GameGrid
-randGrid = (GameGrid 10 ['d', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r','d', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r', 'd', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r','d', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r'])
+randGrid = (GameGrid 10 ['d', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r','d', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r', 'd', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r','d', 'd', 'd', 'g', 'd', 'b', 'b', 'd', 'y', 'd', 'd', 'd', 'd', 'c', 'd', 'r', 'r', 'r', 'd', 'd', 'c', 'b', 'b', 'r', 'r' , 'r', 'r', 'r'])
 
 
--- grabs list of neighbouring cells' indices with edge wrapping
--- TODO: compute neighbours in advance, store as list of lists of Ints?
-cellNeighbours :: GameGrid -> Int -> [Int]
-cellNeighbours grid n
+-- compute neighbours in advance, store as tuple of an Int and a [Char]
+type cellNeighbours :: (Index :: Inr, Neighbours :: [Char]) 
+cellNeighbours cn = 
         -- top left corner case
-  | (n == 0) =
-    [ 1
+      (0, 
+      [1
     , (x - 1)
     , x
     , (x + 1)
@@ -35,8 +34,10 @@ cellNeighbours grid n
     , (x * (x - 1) + 1)
     , (x * x - 1)
     ]
-        --top right corner case
-  | n == (x - 1) =
+    )
+    --top right corner case
+    (
+    (x - 1), 
     [ 0
     , (n - 1)
     , (n + x)
@@ -45,9 +46,9 @@ cellNeighbours grid n
     , (x * x - 1)
     , (x * x - 2)
     , (x * (x - 1))
-    ]
+    ])
         --bottom right corner case
-  | n == (x * x - 1) =
+ ((x * x - 1), 
     [ 0
     , (x - 1)
     , (x - 2)
@@ -114,7 +115,7 @@ cellNeighbours grid n
     , ((n + x) - 1)
     ]
         -- all others
-  | otherwise =
+ 
     [ (n + 1)
     , (n - 1)
     , ((n + x) - 1)
@@ -162,4 +163,4 @@ colourSum cellList
     blue = ((length(filter (\c -> (c == 'b')) cellList)) + (div (length (filter (\c -> (c == 'c'||c =='p')) cellList)) 2))
 
 nextGrid :: GameGrid -> GameGrid
-nextGrid old = GameGrid (d old) [nextCell old x | x <- [0..((d old)-1)]]
+nextGrid old = GameGrid (d old) [(nextCell old x) | x <- [0..(((d old) * (d old))-1)]]
